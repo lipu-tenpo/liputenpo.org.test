@@ -1,4 +1,31 @@
 const yaml = require("js-yaml");
+const Image = require("@11ty/eleventy-img");
+
+function imageShortcode(src, cls, alt, ...allwidths) {
+  // remove last width element
+  let widths = allwidths.slice(0, -1);
+
+  let options = {
+    widths: widths,
+    formats: ["jpeg"],
+    urlPath: "/images/",
+    outputDir: "./_site/images/",
+  };
+
+  // generate images, while this is async we don’t wait
+  Image(src, options);
+  // get metadata even if the images are not fully generated yet
+  let metadata = Image.statsSync(src, options);
+
+  let imageAttributes = {
+    class: cls,
+    alt,
+    sizes: "", // I do not use sizes because I don't know what it is
+    loading: "lazy",
+    decoding: "async",
+  };
+  return Image.generateHTML(metadata, imageAttributes);
+}
 
 module.exports = function (eleventyConfig) {
   // copy files to site
@@ -24,6 +51,22 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addHandlebarsHelper("neq", (a, b) => a != b);
   // get dictionary key
   eleventyConfig.addHandlebarsHelper("getkey", (dict, key) => dict[key]);
+  // sort collection by data.date
+  eleventyConfig.addHandlebarsHelper("reversed", (list) => {
+    if (typeof list == typeof []) {
+      return list.slice().reverse();
+    } else {
+      return list;
+    }
+  });
+  eleventyConfig.addHandlebarsHelper("isObject", (obj) => {
+    return typeof obj == typeof {};
+  });
+  eleventyConfig.addHandlebarsHelper("appendString", (str, append) => {
+    return str + append;
+  });
+
+  // helpers for RSS feed
   // add handler to convert date to ISO string
   eleventyConfig.addFilter("isoDate", (dateObj) => {
     let date = new Date(dateObj);
@@ -34,6 +77,26 @@ module.exports = function (eleventyConfig) {
     let date = new Date();
     date.setHours(0, 0, 0, 0);
     return date.toISOString();
+  });
+
+  // helpers for tag management
+  eleventyConfig.addFilter("getIssueTag", (tags) => {
+    // get "nanpa X" from tag list
+    const nanpa_tags = tags.filter((tag) => tag.startsWith("nanpa"));
+    if (nanpa_tags.length != 1) {
+      throw Error("oh no");
+    }
+    return nanpa_tags.at(0);
+  });
+  eleventyConfig.addFilter("getTokiTypeTag", (tags) => {
+    // get the tag(s) that isn't "nanpa X" or "toki"
+    const nanpa_tags = tags.filter(
+      (tag) => !tag.startsWith("nanpa") && tag != "toki"
+    );
+    if (nanpa_tags.length != 1) {
+      throw Error("oh no");
+    }
+    return nanpa_tags.at(0);
   });
 
   // helpers for use in markdown (toki)
@@ -47,6 +110,10 @@ module.exports = function (eleventyConfig) {
     "sitelen",
     (file, alt) => `<img src="/images/${file}" alt="${alt}">`
   );
+
+  // image shortcode - reduce filesize etc
+  //  use like {{ eleventyImage "images/blah.jpg" "classes" "alt" 300 }}
+  eleventyConfig.addShortcode("eleventyImage", imageShortcode);
 
   return {
     markdownTemplateEngine: "hbs",

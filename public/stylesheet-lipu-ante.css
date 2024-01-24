@@ -1,0 +1,16 @@
+h2 {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.lipu-ante {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.lipu-ante li {
+  margin: 0.5rem;
+}

@@ -3,6 +3,7 @@ title: lipu tenpo
 description: lipu tenpo
 css:
   - stylesheet.css
+og-image: null
 ---
 
 <!DOCTYPE html>
@@ -18,8 +19,8 @@ css:
   <meta property="og:title" content="{{ title }}" />
   <meta property="og:type" content="website" />
   <meta property="og:site" content="lipu tenpo" />
-  <meta property="og:url" content="https://liputenpo.org{{ slug }}" />
-  <meta property="og:image" content="https://liputenpo.org{{ slug }}/og-image.png" />
+  <meta property="og:url" content="https://liputenpo.org{{ page.url }}" />
+  <meta property="og:image" content="https://liputenpo.org{{#if [og-image]}}{{[og-image]}}{{else}}/og-image.png{{/if}}" />
   <meta property="og:description" content="{{ description }}" />
   <meta property="og:locale" content="en_GB" />
 
@@ -29,13 +30,31 @@ css:
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="manifest" href="/site.webmanifest" />
+  {{!-- google fonts --}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
   <!-- stylesheets -->
   {{#each css}}
   <link rel="stylesheet" href="/{{ this }}" />
   {{/each}}
+  <script>
+    setTimeout(() => {
+      document.getElementById('patreon-banner').classList.add('visible')
+    }, 1500)
+  </script>
 </head>
 
 <body>
+  <article id="patreon-banner" class="patreon-banner">
+    <div>
+      <p>
+        lipu tenpo li jo e lipu Patreon!
+        <a target="_blank" href="https://www.patreon.com/liputenpo">o kama sona e ni!</a>
+      </p>
+      <button class="close" onclick="document.getElementById('patreon-banner').classList.remove('visible')">&#10006;</button>
+    </div>
+  </article>
   <header>
     <div id="banner"></div>
     <a href="/" class="title">
@@ -71,7 +90,7 @@ css:
       <ul class="links">
         <li>
           <a href="{{ linluwi.discord }}" target="_blank">
-            <img class="icon" src="/icons_discord.svg" alt="discord icon" />
+            <img class="icon" src="/icons/discord.svg" alt="discord icon" />
             <span>
               Discord
             </span>
@@ -79,7 +98,7 @@ css:
         </li>
         <li>
           <a href="{{ linluwi.linktree }}" target="_blank">
-            <img class="icon" src="/icons_linktree.svg" alt="linktree icon" />
+            <img class="icon" src="/icons/linktree.svg" alt="linktree icon" />
             <span>
               Linktree
             </span>
@@ -87,7 +106,7 @@ css:
         </li>
         <li>
           <a href="mailto:{{ linluwi.email }}">
-            <img class="icon" src="/icons_email.svg" alt="email icon" />
+            <img class="icon" src="/icons/email.svg" alt="email icon" />
             <span>
               {{ linluwi.email }}
             </span>
@@ -95,7 +114,7 @@ css:
         </li>
         <li>
           <a href="{{ linluwi.article_submission_form }}" target="_blank">
-            <img class="icon" src="/icons_pen.svg" alt="pen icon" />
+            <img class="icon" src="/icons/pen.svg" alt="pen icon" />
             <span>
               o pana e pali sina
             </span>
