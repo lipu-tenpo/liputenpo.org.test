@@ -4,6 +4,7 @@ description: lipu tenpo
 css:
   - stylesheet.css
 og-image: null
+scripts: []
 ---
 
 <!DOCTYPE html>
@@ -38,11 +39,31 @@ og-image: null
   {{#each css}}
   <link rel="stylesheet" href="/{{ this }}" />
   {{/each}}
+
+  <!-- patreon banner -->
   <script>
-    setTimeout(() => {
-      document.getElementById('patreon-banner').classList.add('visible')
-    }, 1500)
+    // check if cookie exists
+    if (document.cookie.indexOf('patreon-banner-closed=1') == -1) {
+      // cookie doesn't exist, show banner
+      setTimeout(() => {
+        document.getElementById('patreon-banner').classList.add('visible')
+      }, 1500)      
+    }
+    closeBanner = () => {
+      // set cookie
+      document.cookie = 'patreon-banner-closed=1; path=/; max-age=2628000'
+      document.getElementById('patreon-banner').classList.remove('visible')
+    }
   </script>
+
+  <!-- analytics -->
+  <script data-goatcounter="https://liputenpo.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+  <!-- scripts -->
+  {{#each scripts}}
+    {{{ this }}}
+  {{/each}}
 </head>
 
 <body>
@@ -52,7 +73,7 @@ og-image: null
         lipu tenpo li jo e lipu Patreon!
         <a target="_blank" href="https://www.patreon.com/liputenpo">o kama sona e ni!</a>
       </p>
-      <button class="close" onclick="document.getElementById('patreon-banner').classList.remove('visible')">&#10006;</button>
+      <button class="close" onclick="closeBanner()">&#10006;</button>
     </div>
   </article>
   <header>
@@ -101,6 +122,14 @@ og-image: null
             <img class="icon" src="/icons/linktree.svg" alt="linktree icon" />
             <span>
               Linktree
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ linluwi.patreon }}" target="_blank">
+            <img class="icon" src="/icons/patreon.svg" alt="patreon icon" />
+            <span>
+              Patreon
             </span>
           </a>
         </li>

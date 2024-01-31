@@ -1,5 +1,6 @@
 const yaml = require("js-yaml");
 const Image = require("@11ty/eleventy-img");
+const fs = require("fs");
 
 function imageShortcode(src, cls, alt, ...allwidths) {
   // remove last width element
@@ -30,11 +31,22 @@ function imageShortcode(src, cls, alt, ...allwidths) {
 module.exports = function (eleventyConfig) {
   // copy files to site
   // pdfs, i.e., the main content
-  eleventyConfig.addPassthroughCopy({ pdfs: "/pdfs" });
+  //  do not copy these on --serve as they are large so site refresh is slow
+  console.log(process.env.ELEVENTY_RUN_MODE);
+  if (process.env.ELEVENTY_RUN_MODE != "serve") {
+    eleventyConfig.addPassthroughCopy({ pdfs: "/pdfs" });
+  }
   // static assets
   eleventyConfig.addPassthroughCopy({ public: "/" });
   // toki images
   eleventyConfig.addPassthroughCopy({ "toki/images": "/images" });
+  // do not copy on --serve
+  //  this doesn't seem to have an effect for me
+  // eleventyConfig.setServerPassthroughCopyBehavior("passthrough");
+
+  // do not watch files in /pdfs or /toki/images
+  eleventyConfig.watchIgnores.add("pdfs");
+  eleventyConfig.watchIgnores.add("toki/images");
 
   // add support for reading Yaml from `/_data`
   eleventyConfig.addDataExtension("yaml", (contents) =>
@@ -84,7 +96,7 @@ module.exports = function (eleventyConfig) {
     // get "nanpa X" from tag list
     const nanpa_tags = tags.filter((tag) => tag.startsWith("nanpa"));
     if (nanpa_tags.length != 1) {
-      throw Error("oh no");
+      throw Error("could not find nanpa tag, found tags: " + tags);
     }
     return nanpa_tags.at(0);
   });
@@ -94,21 +106,29 @@ module.exports = function (eleventyConfig) {
       (tag) => !tag.startsWith("nanpa") && tag != "toki"
     );
     if (nanpa_tags.length != 1) {
-      throw Error("oh no");
+      throw Error("could not find toki type tag, found tags: " + tags);
     }
     return nanpa_tags.at(0);
   });
 
   // helpers for use in markdown (toki)
   // pu - link to nimi pi pu ala
-  eleventyConfig.addHandlebarsHelper(
-    "pu",
-    (nimi) => `<sup><a href="/sona#${nimi}">(pu)</a></sup>`
-  );
+  eleventyConfig.addHandlebarsHelper("pu", (nimi) => {
+    // open `nimi-pi-pu-ala.yaml`
+    let pu = yaml.safeLoad(
+      fs.readFileSync(`./_data/nimi-pi-pu-ala.yaml`, "utf8")
+    );
+    // check if nimi is in pu
+    if (!pu[nimi]) {
+      throw Error(`could not find ${nimi} in "./_data/nimi-pi-pu-ala.yaml"`);
+    }
+    return `<sup><a href="/sona#${nimi}">(pu)</a></sup>`;
+  });
   // sitelen - use an image with filename
   eleventyConfig.addHandlebarsHelper(
     "sitelen",
-    (file, alt) => `<img src="/images/${file}" alt="${alt}">`
+    (file, alt) =>
+      `<a class="image" href="/images/${file}"><img src="/images/${file}" alt="${alt}"></a>`
   );
 
   // image shortcode - reduce filesize etc
