@@ -8,27 +8,27 @@ css:
 scripts:
   - '<script defer src="/alpine.min.js"></script>'
 categories:
-  - name: sona
-    collection: sona
-  - name: ma
-    collection: ma
-  - name: musi
-    collection: musi
   - name: kama
     collection: kama
   - name: kulupu
     collection: kulupu
-  - name: toki musi
-    collection: toki-musi
-  - name: toki toki
-    collection: toki-toki
   - name: toki pona
     collection: toki-pona
+  - name: sona
+    collection: sona
+  - name: ma
+    collection: ma
+  - name: pilin
+    collection: pilin
+  - name: toki
+    collection: toki-toki
   - name: toki ante
     collection: toki-ante
+  - name: musi
+    collection: musi
 ---
 <div class="h2">
-  <h2 id="toki">
+  <h2>
       toki
       <a id="rss" href="./feed.xml">
           <img alt="_RSS_" src="/rss.svg" />
@@ -37,6 +37,11 @@ categories:
 </div>
 
 <section class="categories" x-data="{search: ''}">
+  <nav class="quicklinks">
+    {{#each categories}}
+    <a href="#{{slugify name}}">{{name}}</a> {{#unless @last}}<span>•</span>{{/unless}}
+    {{/each}}
+  </nav>
   <search>
     <label for="search">alasa</label>
     <label for="search" class="sitelen-pona">alasa</label>
@@ -48,7 +53,7 @@ categories:
     <input type="search" id="search" x-model="search" x-on:input = "window.history.replaceState(search, '', '/toki/' + (search ? '?alasa=' + search : ''))" x-init="let params = new URLSearchParams(window.location.search); search = params.get('alasa') || ''">
   </search>
   {{#each categories}}
-  <h3 id="{{slugify name}}" class="blobby-{{modulo 4 @index}}">
+  <h3 id="{{slugify name}}" class="blobby-{{modulo 4 @index}}" :class="{'hidden': !('{{#each (reversed (getkey ../collections collection))}}{{data.[nimi-suli]}} {{/each}}'.toLowerCase().includes(search.toLowerCase()) || '{{#each (reversed (getkey ../collections collection))}}{{data.[jan-pali]}} {{/each}}'.toLowerCase().includes(search.toLowerCase()) || '{{#each (reversed (getkey ../collections collection))}}{{getIssueTag data.tags}} {{/each}}'.toLowerCase().includes(search.toLowerCase()) )}">
     {{name}}
     <span class="category-title sitelen-pona">{{name}}</span>
   </h3>
@@ -72,10 +77,10 @@ categories:
                   <span class="sitelen-pona">lipu</span>
                   {{getIssueTag data.tags}}
               </span>
-              <span class="category">
+              {{!-- <span class="category">
                 <span class="sitelen-pona">{{getTokiTypeTag data.tags}}</span>
                 {{getTokiTypeTag data.tags}}
-              </span>
+              </span> --}}
           </div>
       </a>
       {{/each}}

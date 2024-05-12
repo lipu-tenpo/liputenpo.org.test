@@ -1,12 +1,12 @@
 .h2 {
   font-size: 3em;
-  margin: 1rem 0 1rem;
+  margin: 0 0 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .h2 h2 {
-  margin: 0;
+  margin: 1rem 0 0;
   padding: 0.5rem 2rem;
 
   display: flex;
@@ -59,11 +59,21 @@ search > input {
 }
 
 .categories {
+  margin-bottom: 5rem;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.categories .quicklinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.categories .quicklinks span {
+  margin: 0 0.25rem;
 }
 
 .categories h3 {
@@ -73,6 +83,9 @@ search > input {
   justify-content: center;
   align-items: center;
   padding: 1.25rem 2.5rem 0;
+}
+.categories h3.hidden {
+  display: none;
 }
 
 .blobby-0 {
@@ -103,12 +116,11 @@ search > input {
 }
 
 .articles {
-  margin: 1rem;
+  margin: 0 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 5rem;
 }
 
 .article {

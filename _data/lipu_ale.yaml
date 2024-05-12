@@ -1,3 +1,17 @@
+- id: 26
+  title: nanpa jaki
+  date: 2024-05-13
+  pdf: "0026jaki.pdf"
+  pdf_pf: "0026jaki_pf.pdf"
+  pdf_bwpf: "0026jaki_bwpf.pdf"
+  cover_image: "0026jaki_sinpin.png"
+- id: 25.5
+  title: nanpa lili
+  date: 2024-04-01
+  pdf: "0025.5lili.pdf"
+  pdf_pf: "0025.5lili_pf.pdf"
+  pdf_bwpf: "0025.5lili_bwpf.pdf"
+  cover_image: "0025.5lili_sinpin.png"
 - id: 25
   title: nanpa kalama
   date: 2024-03-20
@@ -47,6 +61,11 @@
   pdf_pf: 0019mama_pf.pdf
   pdf_bwpf: 0019mama_bwpf.pdf
   cover_image: 0019mama_sinpin.png
+- id: 18.5
+  title: kati tiki tu lili
+  date: 2023-04-01
+  pdf: 0018.5kati-tiki-tu-lili.pdf
+  cover_image: 0018.5kati-tiki-tu-lili_sinpin.png
 - id: 18
   title: nanpa tu
   date: 2023-02-06
