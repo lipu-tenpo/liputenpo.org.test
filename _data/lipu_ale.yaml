@@ -1,6 +1,13 @@
+- id: 27
+  title: nanpa linja
+  date: 1900-01-01
+  pdf: ""
+  pdf_pf: ""
+  pdf_bwpf: ""
+  cover_image: "0000xxxx_sinpin.png"
 - id: 26
   title: nanpa jaki
-  date: 2024-05-13
+  date: 2024-05-14
   pdf: "0026jaki.pdf"
   pdf_pf: "0026jaki_pf.pdf"
   pdf_bwpf: "0026jaki_bwpf.pdf"
